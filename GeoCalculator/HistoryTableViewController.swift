@@ -16,38 +16,65 @@ class HistoryTableViewController: UIViewController , UITableViewDelegate, UITabl
    
     
     
-
+    //@IBOutlet weak var destPoint: UILabel!
+    //@IBOutlet weak var origPoint: UILabel!
+    
    
     @IBOutlet weak var coordt: UILabel!
     @IBOutlet weak var coord: UILabel!
     @IBOutlet weak var entryTableView: UITableView!
-    var entries : [LocationLookup] = []
+    
+    var entries : [LocationLookup]! = [
+        LocationLookup(origLat: 90.0, origLng: 0.0, destLat: -90.0, destLng: 0.0,
+                       timestamp: Date.distantPast),
+        LocationLookup(origLat: -90.0, origLng: 0.0, destLat: 90.0, destLng: 0.0,
+                       timestamp: Date.distantFuture)]
      
    var delegate : HistoryTableViewControllerDelegate?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //entries.append(LocationLookup(origLat: 55, origLng: 44, destLat: 66, destLng: 88, timestamp: Date()))
-         //entries.append(LocationLookup(origLat: 77, origLng: 78, destLat: 66, destLng: 88, timestamp: Date()))
-        entryTableView.delegate=self
-        entryTableView.dataSource=self
+        entries.append(LocationLookup(origLat: 55, origLng: 44, destLat: 66, destLng: 88, timestamp: Date()))
+         entries.append(LocationLookup(origLat: 77, origLng: 78, destLat: 66, destLng: 88, timestamp: Date()))
+        self.entryTableView.delegate=self
+        self.entryTableView.dataSource=self
         self.sortIntoSections(entries: self.entries)
        
         // Do any additional setup after loading the view.
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return entries.count
+    
+    // final mods
+   
+    // MARK: - Table view data source
+    func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        if let data = self.tableViewData {
+            return data.count
+        } else {
+            return 0
+        }
     }
     
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section:
+        Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        if let sectionInfo = self.tableViewData?[section] {
+            return sectionInfo.entries.count
+        } else {
+            return 0
+        }
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customcell") as! TableViewCell
         cell.cood.text = "(\(entries[indexPath.row].origLat) , \(entries[indexPath.row].origLng) ) , (  \(entries[indexPath.row].destLat) ,  \(entries[indexPath.row].destLng) )"
         cell.coodt.text = "\(entries[indexPath.row].timestamp)"
         return cell
     }
-  
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let del = self.delegate {
@@ -70,9 +97,7 @@ class HistoryTableViewController: UIViewController , UITableViewDelegate, UITabl
         }
     }
     
-    
-
-    
+   
     func sortIntoSections(entries: [LocationLookup]) {
         var tmpEntries : Dictionary<String,[LocationLookup]> = [:]
         var tmpData: [(sectionHeader: String, entries: [LocationLookup])] = []
@@ -109,7 +134,7 @@ class HistoryTableViewController: UIViewController , UITableViewDelegate, UITabl
         }
         self.tableViewData = tmpData
     }
-    
+ 
 
 }
 
