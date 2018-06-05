@@ -24,19 +24,19 @@ class HistoryTableViewController: UIViewController , UITableViewDelegate, UITabl
     @IBOutlet weak var coord: UILabel!
     @IBOutlet weak var entryTableView: UITableView!
     
-    var entries : [LocationLookup]! = [
-        LocationLookup(origLat: 90.0, origLng: 0.0, destLat: -90.0, destLng: 0.0,
-                       timestamp: Date.distantPast),
-        LocationLookup(origLat: -90.0, origLng: 0.0, destLat: 90.0, destLng: 0.0,
-                       timestamp: Date.distantFuture)]
+    var entries : [LocationLookup]! = []
+        //LocationLookup(origLat: 90.0, origLng: 0.0, destLat: -90.0, destLng: 0.0,
+          //             timestamp: Date.distantPast),
+        //LocationLookup(origLat: -90.0, origLng: 0.0, destLat: 90.0, destLng: 0.0,
+            //           timestamp: Date.distantFuture)]
      
    var delegate : HistoryTableViewControllerDelegate?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        entries.append(LocationLookup(origLat: 55, origLng: 44, destLat: 66, destLng: 88, timestamp: Date()))
-         entries.append(LocationLookup(origLat: 77, origLng: 78, destLat: 66, destLng: 88, timestamp: Date()))
+        //entries.append(LocationLookup(origLat: 55, origLng: 44, destLat: 66, destLng: 88, timestamp: Date()))
+         //entries.append(LocationLookup(origLat: 77, origLng: 78, destLat: 66, destLng: 88, timestamp: Date()))
         self.entryTableView.delegate=self
         self.entryTableView.dataSource=self
         self.sortIntoSections(entries: self.entries)
@@ -68,13 +68,31 @@ class HistoryTableViewController: UIViewController , UITableViewDelegate, UITabl
         }
     }
 
+    //use custom cell
+     func tableView(_ tableView: UITableView, cellForRowAt indexPath:IndexPath) -> UITableViewCell {
+     let cell = tableView.dequeueReusableCell(withIdentifier: "customcell", for:
+     indexPath) as! HistoryTableViewCell
+     //let ll = entries[indexPath.row]
+     
+     if let ll = self.tableViewData?[indexPath.section].entries[indexPath.row] {
+     cell.destPoint.text = "(\(ll.origLat.roundTo(places:4)),\(ll.origLng.roundTo(places:4)))"
+     cell.origPoint.text = "(\(ll.destLat.roundTo(places:4)),\(ll.destLng.roundTo(places: 4)))"
+     cell.timestamp.text = ll.timestamp.description
+     }
+ 
+ 
+     return cell
+     }
+    
+    
+    /*
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customcell") as! TableViewCell
         cell.cood.text = "(\(entries[indexPath.row].origLat) , \(entries[indexPath.row].origLng) ) , (  \(entries[indexPath.row].destLat) ,  \(entries[indexPath.row].destLng) )"
         cell.coodt.text = "\(entries[indexPath.row].timestamp)"
         return cell
     }
-
+*/
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let del = self.delegate {

@@ -8,21 +8,23 @@
 
 import UIKit
 
-class HistoryTableViewCell: UITableViewCell {
+class HistoryTableViewCell: UITableViewCell{
+    
+    /*
     func tableView(_ tableView: UITableView, cellForRowAt indexPath:IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customcell", for:
             indexPath) as! HistoryTableViewCell
         //let ll = entries[indexPath.row]
-        
+        /*
         if let ll = self.entryTableView?[indexPath.section].entries[indexPath.row] {
             cell.destPoint.text = "(\(ll.origLat.roundTo(places:4)),\(ll.origLng.roundTo(places:4)))"
             cell.origPoint.text = "(\(ll.destLat.roundTo(places:4)),\(ll.destLng.roundTo(places: 4)))"
             cell.timestamp.text = ll.timestamp.description
         }
- 
+         */
         return cell
     }
-    
+    */
 
     @IBOutlet weak var destPoint: UILabel!
     @IBOutlet weak var origPoint: UILabel!
